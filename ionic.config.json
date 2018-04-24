@@ -1,0 +1,8 @@
+{
+  "name": "coinful",
+  "app_id": "361db0e5",
+  "type": "ionic-angular",
+  "integrations": {
+    "cordova": {}
+  }
+}
