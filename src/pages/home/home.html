@@ -1,14 +1,40 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>
-      Ionic Blank
-    </ion-title>
-  </ion-navbar>
-</ion-header>
-
-<ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
-</ion-content>
+    <ion-toolbar>
+      <ion-title><img src="assets/logo.svg" id="logo"></ion-title>
+      <ion-buttons end>
+        <button ion-button icon-only (click)="showSearch()">
+          <ion-icon name="add"></ion-icon>
+          Add Coins
+        </button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content padding>
+  
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <span id="colname">Coin Name</span>
+        </ion-col>
+        <ion-col>
+          <button ion-button icon-left clear (click)="refreshCoins()" id="refresh" color="light">
+            <ion-icon name="refresh"></ion-icon>
+            Refresh
+          </button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  
+    <ion-list *ngIf="coins">
+      <ion-item-sliding *ngFor="let coin of objectKeys(coins); let i = index" (ionDrag)="swiped(i)">
+        <ion-item no-lines>
+          {{coin}}
+          <ion-note item-end color="bluetxt">
+            {{coins[coin].USD | currency:'USD':true}}
+          </ion-note>
+        </ion-item>
+      </ion-item-sliding>
+    </ion-list>
+  </ion-content>
+  

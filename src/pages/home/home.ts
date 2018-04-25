@@ -1,6 +1,7 @@
-import { DataProvider } from './../../providers/data/data';
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
+import { DataProvider } from '../../providers/data/data';
+import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'page-home',
@@ -8,14 +9,48 @@ import { NavController } from 'ionic-angular';
 })
 export class HomePage {
 
-  constructor(public navCtrl: NavController, private _data: DataProvider) {
+  objectKeys = Object.keys;
+  coins: Object;
+  likedCoins = [];
 
+  constructor(public navCtrl: NavController, private _data: DataProvider, private storage: Storage) {
+    this.storage.remove('likedCoins');
   }
 
   ionViewDidLoad() {
-    this._data.getCoins()
-    .subscribe(result => {
-      console.log(result)
-    })
+
   }
+
+  ionViewWillEnter() {
+    this.refreshCoins();
+  }
+
+  refreshCoins() {
+
+    this.storage.get('likedCoins').then((val) => {
+
+      // If the value is not set, then:
+      if(!val) {
+        this.likedCoins.push('BTC','ETH','IOT');
+        this.storage.set('likedCoins', this.likedCoins);
+
+        this._data.getCoins(this.likedCoins)
+          .subscribe(res => {
+            this.coins = res;
+          })
+      }
+      // Value IS set
+      else {
+        this.likedCoins = val;
+
+        this._data.getCoins(this.likedCoins)
+        .subscribe(res => {
+          this.coins = res;
+        })
+      }
+
+    })
+
+  }
+
 }
